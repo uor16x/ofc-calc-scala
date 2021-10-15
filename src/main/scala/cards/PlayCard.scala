@@ -1,6 +1,6 @@
 package cards
 
-import cards.DeckCard.DeckCard
-import cards.Suit.Suit
+import cards.DeckCards.DeckCards
+import cards.Suits.Suits
 
-case class PlayCard(value: DeckCard, suit: Suit)
+case class PlayCard(value: DeckCards, suit: Suits)

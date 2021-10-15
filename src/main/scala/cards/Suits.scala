@@ -1,6 +1,6 @@
 package cards
 
-object Suit extends Enumeration {
-  type Suit = Value
+object Suits extends Enumeration {
+  type Suits = Value
   val Hearts, Diamonds, Clubs, Spades = Value
 }
