@@ -1,5 +1,7 @@
 package poker
 
+import cards.PlayCard
+
 object Combination extends Enumeration {
   type Combination = Value
   val
@@ -9,8 +11,16 @@ object Combination extends Enumeration {
     ThreeOfAKind,
     Straight,
     Flush,
-    FullHours,
+    FullHouse,
     FourOfAKind,
     StraightFlush,
     RoyalFlush = Value
 }
+
+class CombinationData(value: PlayCard) {}
+
+case class TwoPairsData(pair1: PlayCard, pair2: PlayCard)
+  extends CombinationData(value = null) {}
+
+case class FullHouseData(high: PlayCard, low: PlayCard)
+  extends CombinationData(value = null) {}
