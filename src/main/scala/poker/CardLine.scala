@@ -1,7 +1,7 @@
 package poker
 
 import cards.DeckCards.DeckCards
-import cards.{CardParsable, DeckCards, PlayCard}
+import cards.{DeckCards, PlayCard}
 
 case class InvalidNumberOfPairs(message: String)
   extends Exception(message)
@@ -34,5 +34,5 @@ class CardLine(private var cards: List[PlayCard]) {
   def getPairs: Map[DeckCards, List[PlayCard]] = cards
     .groupBy((card: PlayCard) => card.value)
     .map { case ( deckCard: DeckCards, pairsList: List[PlayCard]) => (deckCard, pairsList) }
-    .filter{ case (deckCard: DeckCards.Value, list) => list.length > 1 }
+    .filter{ case (_: DeckCards.Value, list) => list.length > 1 }
 }

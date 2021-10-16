@@ -1,7 +1,7 @@
 package poker
 
 import cards.DeckCards.DeckCards
-import cards.{DeckCards, PlayCard, Suits}
+import cards.{DeckCards, PlayCard}
 
 import scala.collection.immutable.Nil
 
@@ -59,7 +59,6 @@ object CombinationGroupResolver {
   }
 
   def singlePairHand(pairsCounter: Map[DeckCards, List[PlayCard]], isLong: Boolean): TableCombination = {
-    val key: DeckCards = pairsCounter.keys.head
     val cards: List[PlayCard] = pairsCounter(pairsCounter.keys.head)
     cards.length match {
       case 4 => // four of a kind
@@ -79,20 +78,18 @@ object CombinationGroupResolver {
       .map((cardList: List[PlayCard]) => cardList.length)
       .sum
     pairsSum match {
-      case 4 =>  { // two pairs
+      case 4 =>  // two pairs
         val pair2 :: pair1 :: Nil = pairsCounter.values
           .map((currentPairCards: List[PlayCard]) => currentPairCards.head)
           .toList
           .sortBy(card => card.value.id)
         new TableCombination(Combination.TwoPairs, TwoPairsData(pair1, pair2))
-      }
-      case 5 => { // full house
+      case 5 => // full house
         val low :: high :: Nil = pairsCounter.values
           .toList
           .sortBy(cards => cards.size)
           .map(list => list.head)
         new TableCombination(Combination.FullHouse, FullHouseData(high, low))
-      }
       case _ => throw InvalidNumberOfPairs(s"Invalid multiple pairs sum: $pairsSum")
     }
   }
