@@ -1,6 +1,6 @@
 package poker
 
-import cards.PlayCard
+import cards.{DeckCards, PlayCard}
 
 class CardLine(private var cards: List[PlayCard]) {
   //= Config
@@ -12,6 +12,10 @@ class CardLine(private var cards: List[PlayCard]) {
     cards.forall(card => card.suit == cards.head.suit)
 
   def isStraight: Boolean = isLongLine && (isSequence || isWheel)
+
+  def getPairs: Map[DeckCards.Value, Int] = cards
+    .groupBy(card => card.value)
+    .map{ case (deckCard, playCards) => (deckCard, playCards.length) }
 
   //= Internal
   private val isLongLine: Boolean = cards.length == 5

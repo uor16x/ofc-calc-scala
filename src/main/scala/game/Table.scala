@@ -1,6 +1,6 @@
 package game
 
-import cards.PlayCard
+import cards.{DeckCards, PlayCard}
 import poker.CardLine
 
 class Table(cards: List[String]) {
@@ -14,4 +14,8 @@ class Table(cards: List[String]) {
   )
 
   def print(): Unit = println(s"--\n $top \n $middle \n $bottom")
+
+  def cl1 = new CardLine(bottom)
+  val x: Map[DeckCards.Value, Int] = cl1.getPairs
+  println(x)
 }
