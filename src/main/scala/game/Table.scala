@@ -14,5 +14,4 @@ class Table(cards: List[String]) {
   )
 
   def print(): Unit = println(s"--\n $top \n $middle \n $bottom")
-  val cl1 = new CardLine(top)
 }
