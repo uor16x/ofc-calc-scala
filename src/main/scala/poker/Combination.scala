@@ -1,7 +1,7 @@
 package poker
 
 import cards.DeckCards.DeckCards
-import cards.{DeckCards, PlayCard}
+import cards.{DeckCards, PlayCard, Suits}
 
 object Combination extends Enumeration {
   type Combination = Value
@@ -21,7 +21,7 @@ object Combination extends Enumeration {
     val pairs = cardLine.getPairs
     pairs.size match {
       case 0 => CombinationGroupResolver.sequence(cardLine)
-      case _ => CombinationGroupResolver.pairs(pairs)
+      case _ => CombinationGroupResolver.pairs(pairs, cardLine.isLong)
     }
   }
 }
@@ -48,11 +48,30 @@ object CombinationGroupResolver {
     }
   }
 
-  def straight(cardLine: CardLine): TableCombination = {
-    null
+  def pairs(pairsCounter: Map[DeckCards, List[PlayCard]], isLong: Boolean): TableCombination = {
+    pairsCounter.size match {
+      case 1 => singlePairHand(pairsCounter, isLong)
+      case 2 => multiplePairsHand(pairsCounter, isLong)
+      case _ => throw InvalidNumberOfPairs(s"Found $pairsCounter.size pairs")
+    }
   }
 
-  def pairs(pairs: Map[DeckCards, Int]): TableCombination = {
+  def singlePairHand(pairsCounter: Map[DeckCards, List[PlayCard]], isLong: Boolean): TableCombination = {
+    val key: DeckCards = pairsCounter.keys.head
+    val cards: List[PlayCard] = pairsCounter(pairsCounter.keys.head)
+    cards.length match {
+      case 4 => // four of a kind
+        if (isLong) new TableCombination(Combination.FourOfAKind, new CombinationData(cards.head))
+        else throw InvalidLengthOfLine()
+      case 3 => // three of a kind
+        new TableCombination(Combination.ThreeOfAKind, new CombinationData(cards.head))
+      case 2 => // pair
+        new TableCombination(Combination.Pair, new CombinationData(cards.head))
+      case _ => throw InvalidNumberOfPairs(s"Found ${cards.length} pairs")
+    }
+  }
+
+  def multiplePairsHand(pairsCounter: Map[DeckCards, List[PlayCard]], isLong: Boolean): TableCombination = {
     null
   }
 }

@@ -1,12 +1,17 @@
 package poker
 
 import cards.DeckCards.DeckCards
-import cards.{DeckCards, PlayCard}
+import cards.{CardParsable, DeckCards, PlayCard}
+
+case class InvalidNumberOfPairs(message: String)
+  extends Exception(message)
+case class InvalidLengthOfLine(message: String = "Line should be 5 for this combination")
+  extends Exception(message)
 
 class CardLine(private var cards: List[PlayCard]) {
   //= Config
   require(cards.length >= 3 && cards.length <= 5, "Invalid card line length")
-  cards = cards.sortWith((a, b) => b.value.id > a.value.id)
+  cards = cards.sortWith((a, b) => a.value.id > b.value.id)
 
   //= API
   def head: PlayCard = cards.head
@@ -26,8 +31,8 @@ class CardLine(private var cards: List[PlayCard]) {
       cards(index + 1).value.id - cards(index).value.id == 1)
       .forall(item => item)
 
-  def getPairs: Map[DeckCards, Int] = cards
-    .groupBy(card => card.value)
-    .map{ case (deckCard: DeckCards, playCards) => (deckCard, playCards.length) }
-    .filter{ case (_, occurrences: Int) => occurrences > 1 }
+  def getPairs: Map[DeckCards, List[PlayCard]] = cards
+    .groupBy((card: PlayCard) => card.value)
+    .map { case ( deckCard: DeckCards, pairsList: List[PlayCard]) => (deckCard, pairsList) }
+    .filter{ case (deckCard: DeckCards.Value, list) => list.length > 1 }
 }
