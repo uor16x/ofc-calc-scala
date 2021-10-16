@@ -3,6 +3,8 @@ package poker
 import cards.DeckCards.DeckCards
 import cards.{DeckCards, PlayCard, Suits}
 
+import scala.collection.immutable.Nil
+
 object Combination extends Enumeration {
   type Combination = Value
   val
@@ -72,7 +74,22 @@ object CombinationGroupResolver {
   }
 
   def multiplePairsHand(pairsCounter: Map[DeckCards, List[PlayCard]], isLong: Boolean): TableCombination = {
-    null
+    if (!isLong) throw InvalidLengthOfLine()
+    val pairsSum = pairsCounter.values
+      .map((cardList: List[PlayCard]) => cardList.length)
+      .sum
+    pairsSum match {
+      case 4 =>  { // two pairs
+        val pair1 :: pair2 :: Nil = pairsCounter.values
+          .map((currentPairCards: List[PlayCard]) => currentPairCards.head)
+          .toList
+          .sortWith { case (a, b) => a.value.id > b.value.id }
+        new TableCombination(Combination.TwoPairs, TwoPairsData(pair1, pair2))
+      }
+      case 5 => // full house
+        null
+      case _ => throw InvalidNumberOfPairs(s"Invalid multiple pairs sum: $pairsSum")
+    }
   }
 }
 
