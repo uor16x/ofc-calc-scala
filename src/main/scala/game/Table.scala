@@ -10,6 +10,6 @@ class Table(cards: List[String]) {
   val bottom: List[PlayCard] = List(null)
 
   def parse(): Unit = {
-
+    val parsedCards = cards.map(card => new PlayCard(card))
   }
 }
