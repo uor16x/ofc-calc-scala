@@ -10,4 +10,6 @@ class PlayCard(card: String) {
     DeckCards(DeckCards.parse(card.head).get),
     Suits(Suits.parse(card.tail.head).get),
   )
+
+  override def toString: String = s"[$value : $suit]"
 }

@@ -9,6 +9,6 @@ object Main{
       "Th", "Jh", "Qh", "Kh", "Ah"
     )
     val t = new Table(cards)
-    t.parse()
+    t.print()
   }
 }
