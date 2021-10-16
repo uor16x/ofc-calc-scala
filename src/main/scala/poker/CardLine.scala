@@ -3,6 +3,8 @@ package poker
 import cards.DeckCards.DeckCards
 import cards.{DeckCards, PlayCard}
 
+import scala.math.abs
+
 case class InvalidNumberOfPairs(message: String)
   extends Exception(message)
 case class InvalidLengthOfLine(message: String = "Line should be 5 for this combination")
@@ -28,7 +30,7 @@ class CardLine(private var cards: List[PlayCard]) {
 
   def isSequence: Boolean = isLong &&
     (for (index <- cards.init.indices) yield
-      cards(index + 1).value.id - cards(index).value.id == 1)
+      abs(cards(index + 1).value.id - cards(index).value.id) == 1)
       .forall(item => item)
 
   def getPairs: Map[DeckCards, List[PlayCard]] = cards

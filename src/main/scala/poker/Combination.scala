@@ -28,7 +28,7 @@ object Combination extends Enumeration {
   }
 }
 
-object CombinationGroupResolver {
+private object CombinationGroupResolver {
   def sequence(cardLine: CardLine): TableCombination = {
     (cardLine.isFlush, cardLine.isSequence, cardLine.isWheel) match {
       case (false, true, _) => // straight
