@@ -11,5 +11,5 @@ class PlayCard(card: String) {
     Suits(Suits.parse(card.tail.head).get),
   )
 
-  override def toString: String = s"[$value : $suit]"
+  override def toString: String = s"$value @ $suit"
 }
