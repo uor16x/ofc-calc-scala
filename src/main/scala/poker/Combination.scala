@@ -3,8 +3,6 @@ package poker
 import cards.DeckCards.DeckCards
 import cards.{DeckCards, PlayCard}
 
-import scala.collection.immutable.Nil
-
 object Combination extends Enumeration {
   type Combination = Value
   val
@@ -83,28 +81,30 @@ private object CombinationGroupResolver {
           .map((currentPairCards: List[PlayCard]) => currentPairCards.head)
           .toList
           .sortBy(card => card.value.id)
-        new TableCombination(Combination.TwoPairs, TwoPairsData(pair1, pair2))
+        new TableCombination(Combination.TwoPairs, new CombinationData(pair1, pair2))
       case 5 => // full house
         val low :: high :: Nil = pairsCounter.values
           .toList
           .sortBy(cards => cards.size)
           .map(list => list.head)
-        new TableCombination(Combination.FullHouse, FullHouseData(high, low))
+        new TableCombination(Combination.FullHouse, new CombinationData(high, low))
       case _ => throw InvalidNumberOfPairs(s"Invalid multiple pairs sum: $pairsSum")
     }
   }
 }
 
-class CombinationData(value: PlayCard) {
+class CombinationData(val value: PlayCard, val extraValue: PlayCard = null) {
   override def toString: String = s"[$value]"
-}
 
-case class TwoPairsData(pair1: PlayCard, pair2: PlayCard)
-  extends CombinationData(value = null) {
-  override def toString: String = s"[${pair1.value}] & [${pair2.value}]"
-}
+  def eq(that: CombinationData): Boolean =
+    this.value.value == that.value.value &&
+      (if (extraValue != null)
+        this.extraValue.value == that.extraValue.value
+      else true)
 
-case class FullHouseData(high: PlayCard, low: PlayCard)
-  extends CombinationData(value = null) {
-  override def toString: String = s"[${high.value}] & [${low.value}]"
+  def wins(that: CombinationData): Boolean =
+    this.value.value.id > that.value.value.id &&
+      (if (extraValue != null)
+        this.extraValue.value.id > that.extraValue.value.id
+      else true)
 }
