@@ -15,6 +15,10 @@ object Combination extends Enumeration {
     FourOfAKind,
     StraightFlush,
     RoyalFlush = Value
+
+  def calculate(cards: List[PlayCard]): TableCombination = {
+    null
+  }
 }
 
 class CombinationData(value: PlayCard) {}
