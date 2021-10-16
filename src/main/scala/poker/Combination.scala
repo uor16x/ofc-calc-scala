@@ -27,32 +27,23 @@ object Combination extends Enumeration {
 }
 
 object CombinationGroupResolver {
-  val sequenceCombinator = Map(
-    "straight" -> (false, true, false),
-    "wheel" -> (false, false, true),
-    "flush" -> (true, false, false),
-    "straightFlush" -> (true, true, false),
-    "straightFlushWheel" -> (true, false, true),
-    "kicker" -> (false, false, false)
-  )
-
   def sequence(cardLine: CardLine): TableCombination = {
     (cardLine.isFlush, cardLine.isSequence, cardLine.isWheel) match {
-      case (false, true, _) =>
+      case (false, true, _) => // straight
         new TableCombination(Combination.Straight, new CombinationData(cardLine.head))
-      case (false, false, true) =>
+      case (false, false, true) => // wheel
         new TableCombination(Combination.Straight, new CombinationData(cardLine.tail.head))
-      case (true, false, false) =>
+      case (true, false, false) => // flush
         new TableCombination(Combination.Flush, new CombinationData(cardLine.head))
-      case (true, true, false) => cardLine.head.value match {
-        case DeckCards.Ace =>
+      case (true, true, false) => cardLine.head.value match { // straight/royal flush
+        case DeckCards.Ace => // royal flush
           new TableCombination(Combination.RoyalFlush, new CombinationData(cardLine.head))
-        case _ =>
+        case _ => // straight flush
           new TableCombination(Combination.StraightFlush, new CombinationData(cardLine.head))
       }
-      case (true, false, true) =>
+      case (true, false, true) => // straight flush wheel
         new TableCombination(Combination.StraightFlush, new CombinationData(cardLine.tail.head))
-      case (false, false, false) =>
+      case (false, false, false) => // kicker
         new TableCombination(Combination.Kicker, new CombinationData(cardLine.head))
     }
   }
