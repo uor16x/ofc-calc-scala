@@ -80,14 +80,19 @@ object CombinationGroupResolver {
       .sum
     pairsSum match {
       case 4 =>  { // two pairs
-        val pair1 :: pair2 :: Nil = pairsCounter.values
+        val pair2 :: pair1 :: Nil = pairsCounter.values
           .map((currentPairCards: List[PlayCard]) => currentPairCards.head)
           .toList
-          .sortWith { case (a, b) => a.value.id > b.value.id }
+          .sortBy(card => card.value.id)
         new TableCombination(Combination.TwoPairs, TwoPairsData(pair1, pair2))
       }
-      case 5 => // full house
-        null
+      case 5 => { // full house
+        val low :: high :: Nil = pairsCounter.values
+          .toList
+          .sortBy(cards => cards.size)
+          .map(list => list.head)
+        new TableCombination(Combination.FullHouse, FullHouseData(high, low))
+      }
       case _ => throw InvalidNumberOfPairs(s"Invalid multiple pairs sum: $pairsSum")
     }
   }

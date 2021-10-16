@@ -5,8 +5,8 @@ object Main{
     println("Hello")
     val cards = List(
       "2h", "3h", "4h",
-      "5h", "6h", "7h", "8h", "Th",
-      "4c", "4d", "4h", "5h", "5d"
+      "Th", "Th", "Ah", "8h", "8h",
+      "4c", "4d", "Ah", "5h", "5d"
     )
     val t = new Table(cards)
     t.print()
